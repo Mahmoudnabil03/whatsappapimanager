@@ -1,0 +1,41 @@
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "whatsapp-webhook",
+	"main": "src/index.js",
+	"compatibility_date": "2026-06-06",
+	"compatibility_flags": [
+		"nodejs_compat"
+	],
+	"ai": {
+		"binding": "AI"
+	},
+	"d1_databases": [
+		{
+			"binding": "aqarx_db",
+			"database_name": "aqarx-db",
+			"database_id": "8d796cf2-a5a4-486c-b830-62e15077ace8"
+		}
+	],
+	"vars": {
+		"MY_VERIFY_TOKEN": "my_secret_token_123",
+		"WHATSAPP_ACCESS_TOKEN": "EAAYMKk1uC2IBRiPcZAG1MDcooHc7Vc4AnxZAlawEpImQY0P0ofYuBdoSKHHXlEDZAGbZBFMw1b8ZAH8tX42TL2rAFoFWZBIFHnZBK4lZAcrGb8INQh3BB9C3toaZCzwkZC0MIfWUm5aAyCjmquvZAUkyATq59RXca3UgaX0Fv82ZCcRkPC5R5FuirFtztMg5ZCvcMqBbZColBEzGq3LzoFYaGw1Tsxp7HO7Xgqa73XRQZBdj1apyc2vD1xUvDZAfgj61rB0W8ARo9HSERUizEPeIFLmRA08cnfKCuTOadpytDi3lr4UZD",
+		"MESSENGER_ACCESS_TOKEN": "EAAYMKk1uC2IBRpg6FXqcFamk374ZBNnBr9aP8VCjZCE4RQZCF3oSSFnNRrOBq1VJWuAXidlaqBMiNaEvmaOZA1PfzeJrAa4aTgwhPE09tM6QYs2rCH4vmFsCYBV6ES0QJiOgBKIViQqZCaMoGGAfJe15yFkZCleP8kfe7926GspSHKzcrQ9boLWLdBeHXxlQb71hsn6SyVC8LA0P5IDZA7xpjg9SwZDZD",
+		"INSTAGRAM_ACCESS_TOKEN": "IGAATtcocqb6JBZAFlHWGRrMV9VUUlHeVZAOQ2loOWtmV3lYVEt5dm1kR2NFNS1VVjVpbHllWDBVYlUtZA1ViejJ1NFFlSms2LS1QeUxmcTQ3RHNmSFIyNzJ5SEZAhTGRONU5BaDgxYWJyeXpNcFF5Rmt3MXY0ZAEFsSVI5UnBEUElNVQZDZD"
+	},
+	"observability": {
+		"enabled": false,
+		"head_sampling_rate": 1,
+		"logs": {
+			"enabled": true,
+			"head_sampling_rate": 1,
+			"persist": true,
+			"invocation_logs": true
+		},
+		"traces": {
+			"enabled": true,
+			"persist": true,
+			"head_sampling_rate": 1
+		}
+	},
+	"upload_source_maps": true
+}
