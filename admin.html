@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<body>
+  <h2>Admin Dashboard</h2>
+  <div id="chat-list"></div>
+
+  <script>
+    async function loadMessages() {
+      const res = await fetch('/api/admin/messages');
+      const data = await res.json();
+      document.getElementById('chat-list').innerHTML = data.map(m => `
+        <p><b>${m.customer_phone}:</b> ${m.content} <i>(${m.role})</i></p>
+      `).join('');
+    }
+    loadMessages();
+  </script>
+</body>
+</html>
