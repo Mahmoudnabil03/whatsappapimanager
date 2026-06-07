@@ -17,13 +17,18 @@
     <div id="chat-list">Loading...</div>
 
     <script>
-        // REPLACE THIS WITH YOUR WORKER URL
-        const WORKER_URL = 'https://whatsapp-webhook.mahmoudnabil03.workers.dev/';
+        // REMOVED trailing slash here
+        const WORKER_URL = 'https://whatsapp-webhook.mahmoudnabil03.workers.dev';
 
         async function loadMessages() {
             const container = document.getElementById('chat-list');
+            container.innerHTML = "Loading...";
             try {
+                // Now concatenates to ...workers.dev/api/admin/messages
                 const res = await fetch(`${WORKER_URL}/api/admin/messages`);
+                
+                if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+                
                 const data = await res.json();
                 
                 container.innerHTML = data.map(m => `
@@ -36,11 +41,10 @@
                     </div>
                 `).join('');
             } catch (err) {
-                container.innerHTML = `<p style="color:red;">Error: Could not connect to Worker. Check CORS settings.</p>`;
-                console.error(err);
+                container.innerHTML = `<p style="color:red;">Error: ${err.message}. Check browser console for CORS details.</p>`;
+                console.error("Fetch error:", err);
             }
         }
-
         loadMessages();
     </script>
 </body>
