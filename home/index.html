@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AQARX Admin Dashboard</title>
+    <style>
+        body { font-family: sans-serif; max-width: 800px; margin: 2rem auto; padding: 0 1rem; }
+        .message { border-bottom: 1px solid #ccc; padding: 10px 0; }
+        .user { color: #2c3e50; }
+        .assistant { color: #27ae60; font-weight: bold; }
+        .meta { font-size: 0.8rem; color: #7f8c8d; }
+    </style>
+</head>
+<body>
+    <h1>AQARX Message Logs</h1>
+    <button onclick="loadMessages()">Refresh Messages</button>
+    <div id="chat-list">Loading...</div>
+
+    <script>
+        // REPLACE THIS WITH YOUR WORKER URL
+        const WORKER_URL = 'https://whatsapp-webhook.mahmoudnabil03.workers.dev/';
+
+        async function loadMessages() {
+            const container = document.getElementById('chat-list');
+            try {
+                const res = await fetch(`${WORKER_URL}/api/admin/messages`);
+                const data = await res.json();
+                
+                container.innerHTML = data.map(m => `
+                    <div class="message">
+                        <div class="meta">${new Date(m.timestamp).toLocaleString()}</div>
+                        <div class="${m.role}">
+                            <strong>${m.role.toUpperCase()} (${m.customer_phone}):</strong> 
+                            ${m.content}
+                        </div>
+                    </div>
+                `).join('');
+            } catch (err) {
+                container.innerHTML = `<p style="color:red;">Error: Could not connect to Worker. Check CORS settings.</p>`;
+                console.error(err);
+            }
+        }
+
+        loadMessages();
+    </script>
+</body>
+</html>

@@ -3,18 +3,33 @@ export default {
     const url = new URL(request.url);
 
     // --- ADMIN DASHBOARD: FETCH MESSAGES ---
-    // Access this via your worker URL: /api/admin/messages
     if (url.pathname === "/api/admin/messages" && request.method === "GET") {
       try {
         const { results } = await env.aqarx_db.prepare(
           "SELECT * FROM chat_history ORDER BY timestamp DESC LIMIT 50"
         ).all();
+        
         return Response.json(results, { 
-          headers: { "Access-Control-Allow-Origin": "*" } 
+          headers: { 
+            "Access-Control-Allow-Origin": "*", // Allows your Pages site to fetch data
+            "Access-Control-Allow-Methods": "GET, OPTIONS",
+            "Content-Type": "application/json"
+          } 
         });
       } catch (err) {
         return new Response("Database Error", { status: 500 });
       }
+    }
+
+    // Handle Pre-flight CORS request for the Dashboard
+    if (request.method === "OPTIONS") {
+      return new Response(null, {
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods": "GET, OPTIONS",
+          "Access-Control-Allow-Headers": "Content-Type"
+        }
+      });
     }
 
     // 1. Webhook Verification (GET)
@@ -32,11 +47,7 @@ export default {
     if (request.method === "POST") {
       try {
         const body = await request.json();
-        
-        // Delegate to background processing
         ctx.waitUntil(processIncomingMessage(body, env));
-
-        // Return 200 immediately
         return new Response("EVENT_RECEIVED", { status: 200 });
       } catch (error) {
         console.error("❌ Critical Request Parse Error:", error);
@@ -51,7 +62,6 @@ export default {
 // --- BACKGROUND PROCESSOR ---
 async function processIncomingMessage(body, env) {
   try {
-    // --- PLATFORM A: WHATSAPP ---
     if (body.object === "whatsapp_business_account") {
       const message = body.entry?.[0]?.changes?.[0]?.value?.messages?.[0];
       if (message?.text) {
@@ -65,7 +75,6 @@ async function processIncomingMessage(body, env) {
         });
       }
     } 
-    // --- PLATFORM B: MESSENGER / INSTAGRAM ---
     else if (body.object === "page" || body.object === "instagram") {
       const messagingEvent = body.entry?.[0]?.messaging?.[0];
       if (messagingEvent?.message && !messagingEvent.message.is_echo) {
