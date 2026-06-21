@@ -1,6 +1,6 @@
 {
 	"$schema": "node_modules/wrangler/config-schema.json",
-	"name": "whatsapp-webhook",
+	"name": "whatsappapimanager",
 	"main": "src/index.js",
 	"compatibility_date": "2026-06-06",
 	"compatibility_flags": [
